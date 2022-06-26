@@ -1,0 +1,5 @@
+*.so*
+*.so
+*.pro.user
+*.o
+/.vscode
