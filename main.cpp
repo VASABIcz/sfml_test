@@ -45,7 +45,6 @@ auto objects = std::vector<Obj*>();
 
 Obj* get_object(std::string name) {
     for (auto o: objects) {
-        std::cout << objects.size() << std::endl;
         std::cout << o->get_tag() << std::endl;
         if(o->get_tag() == name) {
             return o;
@@ -87,8 +86,6 @@ public:
 
         void update() {
             auto m = mouse2screen(window);
-            std::cout << m.x << " " << m.y << std::endl;
-            std::cout << window->getView().getCenter().x << " " << window->getView().getCenter().y << std::endl;
             auto v = m-pos;
             if (v.x < 0) {
                 angle = -asin(v.y/mag(v))+PI;
@@ -215,6 +212,16 @@ void start() {
 }
 void finish() {
     window.display();
+    int i = 0;
+    for (auto o: objects) {
+        if (o->get_tag() == "projectile")
+            if (abs(((Projectile*)o)->pos.x) > window.getSize().x*1.5 && abs(((Projectile*)o)->pos.y) > window.getSize().y*1.5) {
+                free(o);
+                objects.erase(objects.begin()+i);
+                std::cout << "gc" << std::endl;
+            }
+        i++;
+    }
 }
 void draw() {
     for (auto o: objects) {
